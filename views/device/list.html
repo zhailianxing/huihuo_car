@@ -38,16 +38,18 @@
 		<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look">预览</a> -->
 	</script>
 </form>
+
 <script type="text/javascript" src="static/layuicms2.0/layui/layui.js"></script>
 <!-- 下面的newList.js是封装的.我们直接将其文件内容拷贝放到下面2行的script中 -->
 <!-- <script type="text/javascript" src="static/layuicms2.0/page/news/newsList.js"></script> -->
 <script>
-layui.use(['form','layer','laydate','table','laytpl'],function(){
+layui.use(['form','layer','laydate','table','laytpl', 'upload'],function(){
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
         laydate = layui.laydate,
         laytpl = layui.laytpl,
+        upload = layui.upload,
         table = layui.table;
 
     //新闻列表
@@ -119,29 +121,39 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         }
     });
 
-    //添加文章
-    function addNews(edit){
+    //edit
+    function edit(edit){
         var index = layui.layer.open({
-            title : "添加文章",
+            title : "编辑",
+            // TODO： type设置为1,然后content是用dom结构引用。这样就不需要像type=2发送http请求了
             type : 2,
-            content : "newsAdd.html",
+            //当type=2时,content就是一个url. 因此当“content:"edit.html"”,实际访问的是:127.0.0.1:8080/edit.html
+            content : "/device/edithtml",
             success : function(layero, index){
                 var body = layui.layer.getChildFrame('body', index);
                 if(edit){
-                    body.find(".newsName").val(edit.newsName);
-                    body.find(".abstract").val(edit.abstract);
-                    body.find(".thumbImg").attr("src",edit.newsImg);
-                    body.find("#news_content").val(edit.content);
-                    body.find(".newsStatus select").val(edit.newsStatus);
-                    body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
-                    body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
+                    body.find(".company_id").val(edit.company_id);
+                    // body.find(".brand_id").val(edit.brand_id);
+                    body.find(".brand_type").val(edit.brand_type);
+
+                    body.find(".device_id").val(edit.device_id);
+                    body.find(".logoImg").attr("src",edit.logo);
+                    body.find(".AdImg").attr("src",edit.ad);
+
+                    // body.find(".newsName").val(edit.newsName);
+                    // body.find(".abstract").val(edit.abstract);
+                    // body.find(".thumbImg").attr("src",edit.newsImg);
+                    // body.find("#news_content").val(edit.content);
+                    // body.find(".newsStatus select").val(edit.newsStatus);
+                    // body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
+                    // body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
                     form.render();
                 }
-                setTimeout(function(){
-                    layui.layer.tips('点击此处返回文章列表', '.layui-layer-setwin .layui-layer-close', {
-                        tips: 3
-                    });
-                },500)
+                // setTimeout(function(){
+                //     layui.layer.tips('点击此处返回文章列表', '.layui-layer-setwin .layui-layer-close', {
+                //         tips: 3
+                //     });
+                // },500)
             }
         })
         layui.layer.full(index);
@@ -176,27 +188,29 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         }
     })
 
+
     //列表操作
-    table.on('tool(newsList)', function(obj){
+    table.on('tool(lay-filter-deviceList)', function(obj){
         var layEvent = obj.event,
             data = obj.data;
 
         if(layEvent === 'edit'){ //编辑
-            addNews(data);
-        } else if(layEvent === 'del'){ //删除
-            layer.confirm('确定删除此文章？',{icon:3, title:'提示信息'},function(index){
-                // $.get("删除文章接口",{
-                //     newsId : data.newsId  //将需要删除的newsId作为参数传入
-                // },function(data){
-                    tableIns.reload();
-                    layer.close(index);
-                // })
-            });
-        } else if(layEvent === 'look'){ //预览
-            layer.alert("此功能需要前台展示，实际开发中传入对应的必要参数进行文章内容页面访问")
+            edit(data);
+            // addNews(data);
         }
+        // } else if(layEvent === 'del'){ //删除
+        //     layer.confirm('确定删除此文章？',{icon:3, title:'提示信息'},function(index){
+        //         // $.get("删除文章接口",{
+        //         //     newsId : data.newsId  //将需要删除的newsId作为参数传入
+        //         // },function(data){
+        //             tableIns.reload();
+        //             layer.close(index);
+        //         // })
+        //     });
+        // } else if(layEvent === 'look'){ //预览
+        //     layer.alert("此功能需要前台展示，实际开发中传入对应的必要参数进行文章内容页面访问")
+        // }
     });
-
 })
 
 </script>

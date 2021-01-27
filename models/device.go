@@ -12,6 +12,7 @@ type Device struct {
 	Id       int64  `json:"id"`
 	CompanyId string `json:"company_id"`
 	BrandId   string `json:"brand_id"`
+	BrandType   string `json:"brand_type"`
 	DeviceId string `json:"device_id"`
 	UserId   int  `json:"user_id"`
 	UserName   string  `json:"user_name"`
@@ -52,6 +53,24 @@ func DeviceGet(company_id, brand_id, device_id string) (error, *Device) {
 	}
 
 	return nil, &obj
+}
+
+func UpdatePicture(company_id, brand_type, logo, ad string) error{
+	o := orm.NewOrm()
+
+	// d := &Device{}
+	// d.CompanyId = company_id
+	// d.BrandType = brand_type
+	// // d.DeviceId = device_id
+	// d.Ad = ad
+	// d.Logo = logo
+	// _, err := o.Update(d)  // 用update函数必须设置主键id字段
+
+	_, err := o.QueryTable("device").Filter("company_id", company_id).Filter("brand_type", brand_type).Update(orm.Params{
+		"ad": ad,
+		"logo": logo,
+	})
+	return err
 }
 
 //

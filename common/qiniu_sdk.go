@@ -41,7 +41,7 @@ func Upload(local_file_path string) (error, string){
 
 	// 七牛key
 	// qiniuKey := "avt/llc_avatar/test2.png"
-	qiniuKey := local_file_path //qiniuKey 只是用来表示上传后url的链接
+	qiniuKey := local_file_path //qiniuKey 只是用来表示上传后url的链接. 例:上传后的图片:"https://imimg.lilithcdn.com/avt/llc_avatar/test2.png"
 
 	// 构建表单上传的对象
 	formUploader := storage.NewFormUploader(&cfg)

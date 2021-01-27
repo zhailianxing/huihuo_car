@@ -6,9 +6,9 @@ import (
 	"time"
 	"os"
 	"strconv"
-	// "baseLayuiCMS2/models"
+	// "errors"
 	"encoding/json"
-	"baseLayuiCMS2/common"
+	// "baseLayuiCMS2/common"
 )
 
 type UploadController struct {
@@ -47,7 +47,7 @@ func (c *UploadController) Post() {
 
 	// 开发测试的时候就不再真正的上传图片
 	// err, img_path := common.Upload(local_path)
-	err, img_path := error(nil), "https://imimg.lilithcdn.com/avt/llc_avatar/test2.png"
+	err, img_path := nil, "https://imimg.lilithcdn.com/avt/llc_avatar/test2.png"
 	ret := Ret{}
 	if err != nil {
 		ret.Code = -1 
